@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TODO-list</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+    body {
+      background-color: whitesmoke;
+      text-align: center;
+    }
+    h1 {
+      color: #0AB0BA;
+      margin-top: 100px;
+      font-size: 45px;
+    }
+
+    input {
+      font-size: 20px;
+      padding: 15px 25px 15px 25px;
+      min-width: 360px;
+      border: honeydew;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+      font-family: Roboto;
+    }
+
+    .todo-list {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      
+      margin-top: 10px;
+      text-align: center;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    li {
+        user-select: none;
+        font-size: 20px;
+        padding: 20px 100px;
+        border: honeydew;
+        background-color: white;
+        width: 100%;
+        max-width: 210px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        margin-bottom: 10px;
+        font-family: Roboto;
+        word-break: break-all;
+        transition: background-color .5s ease-in-out;
+    }
+
+    .task {
+        user-select: none;
+        font-size: 20px;
+        padding: 20px 100px;
+        border: honeydew;
+        background-color: white;
+        width: 210px;
+        max-width: 210px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        margin-bottom: 13px;
+        font-family: Roboto;
+        word-break: break-all;
+        transition: background-color .5s ease-in-out;
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    .task-completed {
+        background-color: #41e06c;
+        color: #ffffff;
+        text-decoration: line-through;
+    }
+
+    .task-completed-button {
+        height: 64px;
+        background-color: #ffffff;
+        width: 64px;
+    }
+
+    .task-completed-button:hover {
+        background-color: #41e06c;
+    }
+
+    .close {
+        background-color: orangered;
+        width: 30px;
+        height: 27px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+        margin-left: -20px;
+        align-self: flex-end;
+        font-size: 25px;
+    }
+
+    .paragraph {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 12px;
+        margin: 5px;
+    }
+
+  </style>
+</head>
+<body>
+<h1>TODO-ATN</h1>
+
+<div class="mainDiv">
+  <input id="input" type="text" placeholder="What needs to be done?">
+
+  <div id="todo-list" class="todo-list">
+    <ul id="myUL">
+
+    </ul>
+  </div>
+</div>
+
+<script>
+  let toDoList = document.getElementsByTagName("LI");
+  for (let i = 0; i < toDoList.length; ++i) {
+    let span = document.createElement("DIV");
+    let txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    toDoList[i].appendChild(span);
+  }
+
+  let close = document.getElementsByClassName("close");
+  for (let i = 0; i < close.length; i++) {
+    close[i].onclick = function() {
+      let div = this.parentElement;
+      div.style.display = "none";
+    }
+  }
+
+  let list = document.querySelector('ul');
+  list.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LI') {
+      e.target.classList.toggle('checked');
+    }
+  }, false);
+
+
+  document.querySelector("#input").addEventListener('keydown', (e) => {
+    if (e.key == "Enter") {
+        let task = document.createElement("div");
+        if (document.querySelector("#input").value == "") {
+            return;
+        }
+        task.innerHTML = document.querySelector("#input").value + "\t";
+        task.setAttribute('data-completed', 'false');
+        task.addEventListener('dblclick', e => {
+            e.currentTarget.setAttribute('data-completed', 'true');
+            e.currentTarget.classList.toggle('task-completed');
+        });
+        task.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            e.currentTarget.remove();
+        })
+        task.classList.add('task');
+        
+        document.querySelector('#input').value = '';
+        
+        let span = document.createElement("DIV");
+        let txt = document.createTextNode("\u00D7");
+        span.className = "close";
+        span.appendChild(txt);
+
+        let string = document.createElement("div");
+        string.appendChild(task);
+        string.appendChild(span);
+        string.classList.add("paragraph");
+        document.querySelector("#todo-list").append(string);
+
+        for (let i = 0; i < close.length; i++) {
+            close[i].onclick = function() {
+                let div = this.parentElement;
+                div.style.display = "none";
+            }
+        }
+    }
+  })
+
+
+</script>
+<footer>
+    <p>Крестик - закрыть</p>
+    <p>2 раза нажать - выполнить</p>
+</footer>
+</body>
+</html>
